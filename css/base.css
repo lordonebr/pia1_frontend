@@ -1,0 +1,16 @@
+.imgCoin { 
+    width: 40px; 
+    height: 40px; 
+}
+
+.divOff {
+    display:none;
+}
+
+.colCostAward {
+    width: 10%;
+}
+
+.colDescAward {
+    width: 90%;
+}

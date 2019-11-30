@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"></script>
+        <script src="https://unpkg.com/gijgo@1.9.13/js/messages/messages.pt-br.js"></script>
+        <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+        
+        <link rel="stylesheet" type="text/css" href="css/base.css">
+
+        <script src="js/base.js"></script>
+        <script src="js/login.js"></script>
+        <script src="js/home.js"></script>
+        <script src="js/index.js"></script>
+
+        <title>Coins - Merit Money</title>
+    </head>
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+                <a class="navbar-brand" href="#" onclick='pageClicked(constIdPageHome)'>
+                    <img src="images/coinMain.jpg" class="imgCoin" alt="Imagem de capa">
+                    Coins: Merit Money
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick='pageClicked(constIdPageDonate)'>Doar <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick='pageClicked(constIdPageAwards)'>Resgatar</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Histórico
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdPageHist, true)'>Ver meu</a>
+                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdPageHist, false)'>Ver todos</a>
+                        </li>
+                    </ul>
+                </div>
+                
+            </nav>
+            <nav>
+                <div id="idDivLoginOptions" class="divOff">
+                    <div class="row justify-content-end">
+                        <div class="col-auto mt-4">
+                            <p class="border border-info font-weight-bold px-1">Saldo
+                                <span>D: $
+                                    <span id="idBalanceDonate" class="font-weight-normal">0</span>
+                                </span>
+                                <span>R: $
+                                    <span id="idBalanceReception" class="font-weight-normal">0</span>
+                            </p>
+                        </div>
+                        <div class="col-auto text-center mr-3">
+                            <span class="row" id="idUserName"></span>
+                            <button onclick="logout()" class="row btn btn-danger btn-sm" type="button">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <div id="idDivExternalHtml">
+
+            </div>
+
+            <div id="homePag" class="divOff">
+                <div class="row justify-content-md-center">
+                    <div class="col">
+                        <h4>Instruções básicas:</h4>
+                        <ul>
+                            <li><span>Recompense seus colegas de trabalho, apartir do seu saldo destinado a doações.</span></li>
+                            <li><span>Resgate recompensas incríveis apartir dos créditos recebidos.</span></li>
+                            <li><span>A qualquer momento, confira o seu histórico de doações ou de seus colegas.</span></li>
+                        </ul>
+                    </div>   
+                    <div class="col-md-7 border rounded border-info py-2 pl-3 m-1">
+                        <h5>Últimas doações</h5>
+                        <table class="table table-bordered table-striped table-sm" id="idLastHist">
+                            <thead>
+                                <tr class="bg-info text-white"> 
+                                    <th scope="col">Data</th>
+                                    <th scope="col">Emissor</th>
+                                    <th scope="col">Destinatário</th>
+                                    <th scope="col">Créditos</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-light">
+                                <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
+                            </tbody>
+                        </table> 
+                    </div>     
+                </div>
+            </div>
+
+            <div id="donatePag" class="divOff">
+                <h1>Doação para colegas</h1>
+                <form class="border rounded border-info p-2">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cmbCoworkers">Destinatário</label>
+                            <select class="form-control" id="cmbCoworkers" required>
+                                    <option disabled selected value> --- Selecione um colega --- </option>
+                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputQtCred">Quantidade</label>
+                            <input type="number" class="form-control" id="inputQtCred" min="1" max="999" placeholder="Qt. Créditos" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputDesc">Motivo</label>
+                            <input type="text" class="form-control" id="inputDesc" placeholder="Digite o motivo da doação" maxlength="300" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary">Doar</button>
+                  </form>
+            </div>
+
+            <div id="awardsPag" class="divOff">
+                <h1>Resgate de prêmios</h1>
+                <form class="border rounded border-info p-2">
+                    
+                    <table class="table table-bordered table-striped table-sm" id="idAwardsTable">
+                        <thead>
+                            <tr class="bg-info text-white"> 
+                                <th scope="col"></th>
+                                <th scope="col">Custo</th>
+                                <th scope="col" class="colDescAward">Descrição do prêmio</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-light">
+                            <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
+                        </tbody>
+                    </table> 
+                    <strong class="d-block"><span>Créditos selecionados: <span id="idTotalAwardsSel">0</span></strong>
+                    <strong class="d-block"><span>Quantidade selecionada: <span id="idQtAwardsSel">0</span></strong>
+                    
+                    <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary">Resgatar</button>
+                  </form>
+            </div>
+
+            <div id="histPage" class="divOff"> 
+                <h1>Histórico de doações</h1>
+                <form class="border rounded border-info p-2">
+                        <h6>Para um histório mais detalhado utilize dos filtros abaixo:</h6>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cmbUsersDonate">Emissor</label>
+                            <select class="form-control" id="cmbUsersDonate">
+                                    <option selected value> --- Selecione um emissor --- </option>
+                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cmbUsersReceptor">Destinatário</label>
+                            <select class="form-control" id="cmbUsersReceptor">
+                                    <option selected value> --- Selecione um destinatário --- </option>
+                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="datepicker">Data da doação</label>
+                            <input id="datepicker" class="form-control" placeholder="Selecione uma data"  />
+                            <script>
+                                var datepicker, config;
+                                config = {
+                                    locale: 'pt-br',
+                                    format: 'dd/mm/yyyy',
+                                    uiLibrary: 'bootstrap4'
+                                };
+                                $(document).ready(function () {
+                                    datepicker = $('#datepicker').datepicker(config);
+                                });
+                            </script>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" onclick="clickedHist(event)" class="btn btn-primary">Filtrar</button>
+                </form>
+
+                <table class="table table-bordered table-striped table-sm" id="idHist">
+                    <thead>
+                        <tr class="bg-info text-white"> 
+                            <th scope="col">Data</th>
+                            <th scope="col">Emissor</th>
+                            <th scope="col">Destinatário</th>
+                            <th scope="col">Créditos</th>
+                            <th scope="col">Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-light">
+                        <!-- CONTEÚDO DO HISTÓRICO DE TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
+                    </tbody>
+                </table> 
+            </div>
+            
+        </div>
+        
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <!--script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
