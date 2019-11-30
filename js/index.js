@@ -48,68 +48,72 @@ loadBalance = () => {
 // recupera do WS, a lista dos usuarios para doação
 loadListUser = (idCbUsers) => {
 
-    const userNameTag = "userName";
-    const idUserTag = "idUser";
+    loadFromService('GET', '/users')
+        .then(usersJSON => {
 
-    let usersJSON = [
-        {
-            [userNameTag] : "Alice Vitória",
-            [idUserTag] : 1
-        },
-        {
-            [userNameTag] : "André Guilherme de Almeida Santos",
-            [idUserTag] : 2
-        },
-        {
-            [userNameTag] : "Arthur Santos",
-            [idUserTag] : 3
-        },
-        {
-            [userNameTag] : "Márcia Santos",
-            [idUserTag] : 4
-        },
-        {
-            [userNameTag] : "Mariana Deus",
-            [idUserTag] : 5
-        },
-        {
-            [userNameTag] : "Paulo Santos",
-            [idUserTag] : 6
-        },
-    ]
+            const userNameTag = "name";
+            const idUserTag = "id";
 
-    let element = document.getElementById(idCbUsers);
-    if(element){
+            /*usersJSON = [
+                {
+                    [userNameTag] : "Alice Vitória",
+                    [idUserTag] : 1
+                },
+                {
+                    [userNameTag] : "André Guilherme de Almeida Santos",
+                    [idUserTag] : 2
+                },
+                {
+                    [userNameTag] : "Arthur Santos",
+                    [idUserTag] : 3
+                },
+                {
+                    [userNameTag] : "Márcia Santos",
+                    [idUserTag] : 4
+                },
+                {
+                    [userNameTag] : "Mariana Deus",
+                    [idUserTag] : 5
+                },
+                {
+                    [userNameTag] : "Paulo Santos",
+                    [idUserTag] : 6
+                },
+            ]*/
 
-        let idDonateUser = element.options[element.selectedIndex].value;
+            let element = document.getElementById(idCbUsers);
+            if(element){
 
-        // limpa conteudo antigo
-        for(let i = element.options.length - 1 ; i > 0 ; i--)
-            element.remove(i);
+                let idDonateUser = element.options[element.selectedIndex].value;
 
-        let setSelected = false;
-    
-        // preenche com o conteudo novo vindo do WS
-        for(let idx in usersJSON){
+                // limpa conteudo antigo
+                for(let i = element.options.length - 1 ; i > 0 ; i--)
+                    element.remove(i);
 
-            if(usersJSON[idx].hasOwnProperty(userNameTag) &&
-            usersJSON[idx].hasOwnProperty(idUserTag) 
-            ){
-                let option = document.createElement("option");
-                option.text = usersJSON[idx][userNameTag]; 
-                option.value = usersJSON[idx][idUserTag]; 
-                if(idDonateUser != "" && usersJSON[idx][idUserTag] == idDonateUser){
-                    option.selected = true;
-                    setSelected = true;
+                let setSelected = false;
+            
+                // preenche com o conteudo novo vindo do WS
+                for(let idx in usersJSON){
+
+                    if(usersJSON[idx].hasOwnProperty(userNameTag) &&
+                    usersJSON[idx].hasOwnProperty(idUserTag) 
+                    ){
+                        let option = document.createElement("option");
+                        option.text = usersJSON[idx][userNameTag]; 
+                        option.value = usersJSON[idx][idUserTag]; 
+                        if(idDonateUser != "" && usersJSON[idx][idUserTag] == idDonateUser){
+                            option.selected = true;
+                            setSelected = true;
+                        }
+
+                        element.appendChild(option);
+                    }
                 }
 
-                element.appendChild(option);
+                if(!setSelected)
+                    element.options[0].selected = true;
             }
-        }
-
-        if(!setSelected)
-            element.options[0].selected = true;
-    }
+        });
 }
 
 loadListAwards = () => {
