@@ -10,35 +10,39 @@ window.addEventListener("load", function(event) {
 // recupera do WS, o saldo para doação e o recebido
 loadBalance = () => {
 
-    let idUser = 2;
-    loadFromService('GET', `/users/${idUser}/balances`)
-    .then(balanceJson => {
+    let idUser = getInfoLocal(constTagStorageCurrentUserId);
+    if(!isNaN(idUser)){
+        idUser = parseInt(idUser);
 
-        const balanceDonateTag = "credit";
-        const balanceReceptionTag = "receptions";
-    
-        /*balanceJson = {
-            [balanceDonateTag] : 190,
-            [balanceReceptionTag] : 160
-        }*/
-    
-        let balanceDonate = 0;
-        if(balanceJson.hasOwnProperty(balanceDonateTag))
-            balanceDonate = balanceJson[balanceDonateTag];
+        loadFromService('GET', `/users/${idUser}/balances`)
+        .then(balanceJson => {
+
+            const balanceDonateTag = "credit";
+            const balanceReceptionTag = "receptions";
         
-        let balanceReception = 0;
-        if(balanceJson.hasOwnProperty(balanceReceptionTag))
-            balanceReception = balanceJson[balanceReceptionTag];
-    
-        setTextSpan("idBalanceDonate", balanceDonate); 
-        setTextSpan("idBalanceReception", balanceReception);
+            /*balanceJson = {
+                [balanceDonateTag] : 190,
+                [balanceReceptionTag] : 160
+            }*/
+        
+            let balanceDonate = 0;
+            if(balanceJson.hasOwnProperty(balanceDonateTag))
+                balanceDonate = balanceJson[balanceDonateTag];
+            
+            let balanceReception = 0;
+            if(balanceJson.hasOwnProperty(balanceReceptionTag))
+                balanceReception = balanceJson[balanceReceptionTag];
+        
+            setTextSpan("idBalanceDonate", balanceDonate); 
+            setTextSpan("idBalanceReception", balanceReception);
 
-        turnOnOffPage(constIdLoginOptions, true);
-        setTextSpan("idUserName", getCurrentUserName());
-    })
-    .catch(function(error) {
-        console.log("Falha ao carregar saldos");
-    });
+            turnOnOffPage(constIdLoginOptions, true);
+            setTextSpan("idUserName", getCurrentUserName());
+        })
+        .catch(function(error) {
+            console.log("Falha ao carregar saldos");
+        });
+    }
 }
 
 // recupera do WS, a lista dos usuarios para doação

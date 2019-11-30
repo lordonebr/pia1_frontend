@@ -26,16 +26,18 @@ clickedLogin = (event) => {
                     }
                     else {
                         // autenticação feita com sucesso
-                        if(jsonOut.hasOwnProperty("token")){
-                            setUserToken(jsonOut["token"]);
+                        if(jsonOut.hasOwnProperty("token") &&
+                           jsonOut.hasOwnProperty("name")  &&
+                           jsonOut.hasOwnProperty("idUser")
+                        ){
+                            setInfoLocal(constTagStorageUserToken, jsonOut["token"]);
+                            setInfoLocal(constTagStorageCurrentUserId, jsonOut["idUser"]);
+                            setInfoLocal(constTagStorageCurrentUserName, jsonOut["name"]);
+
+                            setTextSpan("idUserName", jsonOut["name"]);
                             turnOnOffPage(constIdLogin, false);
                             turnOnOffPage(constIdLoginOptions, true);
                             loadCurrentPage();
-                        }
-
-                        if(jsonOut.hasOwnProperty("name")){
-                            setCurrentUserName(jsonOut["name"]);
-                            setTextSpan("idUserName", jsonOut["name"]);
                         }
                     }
                 }
@@ -81,7 +83,7 @@ clickedSignup = (event) => {
                     else {
                         // usuário foi criado com sucesso, redireciona para a página de login
                         if(jsonOut.hasOwnProperty("message"))
-                            sessionStorage.setItem(constTagStorageLoginCreatedMsg, jsonOut["message"]);
+                            setInfoLocal(constTagStorageLoginCreatedMsg, jsonOut["message"]);
 
                         loadCurrentPage();
                     }

@@ -11,16 +11,31 @@ const constIdLoginOptions = "idDivLoginOptions";
 const constTagStorageUserToken = "UserToken";
 const constTagStorageCurrentPage  = "CurrentPage";
 const constTagStorageCurrentUserName  = "CurrentUserName";
+const constTagStorageCurrentUserId  = "CurrentUserId";
 const constTagStorageLoginCreatedMsg  = "LoginCreatedMsg";
+
+// recupera alguma informação localmente (sessionStorage)
+getInfoLocal = (tag) => {
+    let valFromTag = sessionStorage.getItem(tag);
+    if(valFromTag == null)
+        valFromTag = "";
+
+    return valFromTag;
+}
+
+// salva alguma informação localmente (sessionStorage)
+setInfoLocal = (tag, valFromTag) => {
+    sessionStorage.setItem(tag, valFromTag);
+}
+
+// remove alguma informação localmente (sessionStorage)
+removeInfoLocal = () => {
+    sessionStorage.removeItem(constTagStorageCurrentUserName);
+}
 
 // recupera o token de autenticação
 getUserToken = () => {
     return sessionStorage.getItem(constTagStorageUserToken);
-}
-
-// salva o token de autenticação
-setUserToken = (token) => {
-    sessionStorage.setItem(constTagStorageUserToken, token);
 }
 
 // remove token de autenticação
@@ -28,7 +43,7 @@ removeUserToken = () => {
     sessionStorage.removeItem(constTagStorageUserToken);
 }
 
-// recupera o token de autenticação
+// recupera o nome do usuário logado
 getCurrentUserName = () => {
     let userName = sessionStorage.getItem(constTagStorageCurrentUserName);
     if(userName == null)
@@ -37,12 +52,7 @@ getCurrentUserName = () => {
     return userName;
 }
 
-// salva o token de autenticação
-setCurrentUserName = (userName) => {
-    sessionStorage.setItem(constTagStorageCurrentUserName, userName);
-}
-
-// remove token de autenticação
+// remove o nome do usuário logado
 removeCurrentUserName = () => {
     sessionStorage.removeItem(constTagStorageCurrentUserName);
 }
@@ -133,7 +143,6 @@ loadFromService = (typeService, urlService, jsonIn) => {
                             setTextSpan("idErrorLogin", "");
                             sessionStorage.removeItem(constTagStorageLoginCreatedMsg);
                         }
-                            
 
                         removeUserToken();
                         removeCurrentUserName();
