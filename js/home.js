@@ -68,5 +68,8 @@ loadLastHist = () => {
                     }
                 }
             }
+        })
+        .catch((error) => {
+            console.log("Falha ao carregar os últimos históricos: " + error);
         });
 }

@@ -8,10 +8,10 @@ window.addEventListener("load", function(event) {
 });
 
 // recupera do WS, o saldo para doação e o recebido
-loadBalance = () => {
+loadBalance = (exeSuccess) => {
 
     let idUser = getInfoLocal(constTagStorageCurrentUserId);
-    if(!isNaN(idUser)){
+    if(idUser !== "" && !isNaN(idUser)){
         idUser = parseInt(idUser);
 
         loadFromService('GET', `/users/${idUser}/balances`)
@@ -37,16 +37,20 @@ loadBalance = () => {
             setTextSpan("idBalanceReception", balanceReception);
 
             turnOnOffPage(constIdLoginOptions, true);
-            setTextSpan("idUserName", getCurrentUserName());
+            setTextSpan("idUserName", getInfoLocal(constTagStorageCurrentUserName));
+
+            if(exeSuccess)
+                exeSuccess();
+
         })
-        .catch(function(error) {
-            console.log("Falha ao carregar saldos");
+        .catch((error) => {
+            console.log("Falha ao carregar saldos: " + error);
         });
     }
 }
 
 // recupera do WS, a lista dos usuarios para doação
-loadListUser = (idCbUsers) => {
+loadListUser = (idCbUsers, showAllUser) => {
 
     loadFromService('GET', '/users')
         .then(usersJSON => {
@@ -91,28 +95,38 @@ loadListUser = (idCbUsers) => {
                     element.remove(i);
 
                 let setSelected = false;
+
+                let idUser = getInfoLocal(constTagStorageCurrentUserId);
+                if(!isNaN(idUser)){
+                    idUser = parseInt(idUser);
             
-                // preenche com o conteudo novo vindo do WS
-                for(let idx in usersJSON){
+                    // preenche com o conteudo novo vindo do WS
+                    for(let idx in usersJSON){
 
-                    if(usersJSON[idx].hasOwnProperty(userNameTag) &&
-                    usersJSON[idx].hasOwnProperty(idUserTag) 
-                    ){
-                        let option = document.createElement("option");
-                        option.text = usersJSON[idx][userNameTag]; 
-                        option.value = usersJSON[idx][idUserTag]; 
-                        if(idDonateUser != "" && usersJSON[idx][idUserTag] == idDonateUser){
-                            option.selected = true;
-                            setSelected = true;
+                        if(usersJSON[idx].hasOwnProperty(userNameTag) &&
+                          usersJSON[idx].hasOwnProperty(idUserTag) 
+                        ){
+                            if(showAllUser || usersJSON[idx][idUserTag] !== idUser){
+                                let option = document.createElement("option");
+                                option.text = usersJSON[idx][userNameTag]; 
+                                option.value = usersJSON[idx][idUserTag]; 
+                                if(idDonateUser != "" && usersJSON[idx][idUserTag] == idDonateUser){
+                                    option.selected = true;
+                                    setSelected = true;
+                                }
+
+                                element.appendChild(option);
+                            }
                         }
-
-                        element.appendChild(option);
                     }
                 }
 
                 if(!setSelected)
                     element.options[0].selected = true;
             }
+        })
+        .catch((error) => {
+            console.log("Falha ao carregar lista de usuário: " + error);
         });
 }
 
@@ -254,58 +268,6 @@ loadHist = (jsonFilter) => {
     }
 }
 
-// efetua a ação de clique do botão do formulario de doação
-clickedDonate = (event) => {
-    
-    const idDonateUserTag = "idDonateUser";
-    const qtDonateTag = "qtDonate";
-    const descTag = "desc";
-
-    let cmbCoworkers = document.getElementById("cmbCoworkers");
-    let inputQtCred = document.getElementById("inputQtCred");
-    let inputDesc = document.getElementById("inputDesc");
-
-    if(cmbCoworkers && inputQtCred && inputDesc){
-        let idDonateUser = cmbCoworkers.options[cmbCoworkers.selectedIndex].value;
-        let qtDonate = inputQtCred.value;
-        let desc = inputDesc.value;
-
-        if(idDonateUser != "" && qtDonate != "" && desc != ""){
-
-            let spanBalanceDonate = document.getElementById("idBalanceDonate");
-            if(spanBalanceDonate){
-                let balanceDonate = spanBalanceDonate.innerHTML;
-                if(!isNaN(balanceDonate) && !isNaN(qtDonate)){
-                    balanceDonate = parseInt(balanceDonate);
-                    qtDonate = parseInt(qtDonate);
-                    if(qtDonate <= balanceDonate){
-
-                        let jsonDonate = {
-                            [idDonateUserTag] : idDonateUser,
-                            [qtDonateTag] : qtDonate,
-                            [descTag] : desc
-                        };
-            
-                        // CHAMA O WS PARA REALIZAR UMA TRANSAÇÃO DE DOAÇÃO
-                        alert(JSON.stringify(jsonDonate));
-            
-                        let jsonResponse = true;
-                        if(jsonResponse){
-                            // limpa valores preenchidos no formulario
-                            cmbCoworkers.options[0].selected = true;
-                            inputQtCred.value = "";
-                            inputDesc.value = "";
-            
-                            event.preventDefault(); 
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-}
-
 // efetua a ação de clique do botão do formulario de resgate
 clickedGetAwards = (event) => {
 
@@ -430,10 +392,9 @@ clickedHist = (event) => {
 
 // efetua a ação de um clique do menu para processar uma página
 pageClicked = (namePage, optionHist) => {
-    turnOnOffPage(constIdPageHome, (constIdPageHome === namePage));
-    
-    let loadPageDonate = (constIdPageDonate === namePage);
-    turnOnOffPage(constIdPageDonate, loadPageDonate);
+
+    turnOnOffPage(constIdPageHome,   (constIdPageHome   === namePage));
+    turnOnOffPage(constIdPageDonate, (constIdPageDonate === namePage));
     
     let loadPageAwards = (constIdPageAwards === namePage);
     turnOnOffPage(constIdPageAwards, loadPageAwards);
@@ -441,26 +402,9 @@ pageClicked = (namePage, optionHist) => {
     let loadPageHist = (constIdPageHist === namePage);
     turnOnOffPage(constIdPageHist, loadPageHist);
 
-    setCurrentPage(namePage);
-
+    setInfoLocal(constTagStorageCurrentPage, namePage);
     loadBalance();
-
     loadPage(namePage);
-
-    if(loadPageDonate){
-        loadListUser("cmbCoworkers");
-
-        // seta o valor máximo que podemos doar
-        let spanBalanceDonate = document.getElementById("idBalanceDonate");
-        let inputQtCred = document.getElementById("inputQtCred");
-        if(spanBalanceDonate && inputQtCred){
-            let balanceDonate = spanBalanceDonate.innerHTML;
-            if(!isNaN(balanceDonate))
-                inputQtCred.max = parseInt(balanceDonate);
-            else
-                inputQtCred.max = 999;
-        }
-    }
 
     if(loadPageAwards){
 
@@ -475,8 +419,8 @@ pageClicked = (namePage, optionHist) => {
     }
 
     if(loadPageHist){
-        loadListUser("cmbUsersDonate");
-        loadListUser("cmbUsersReceptor");
+        loadListUser("cmbUsersDonate", true);
+        loadListUser("cmbUsersReceptor", true);
 
         const idUser = 2;
 
@@ -516,8 +460,8 @@ pageClicked = (namePage, optionHist) => {
 
 loadPage = (idPage) => {
 
-    let loadPageHome = (constIdPageHome === idPage);
-    if(loadPageHome)
+    if(constIdPageHome === idPage)
         initHome();
-
+    else if(constIdPageDonate === idPage)
+        initDonation();
 }

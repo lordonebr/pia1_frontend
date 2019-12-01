@@ -5,7 +5,7 @@ const constIdPageHome = "homePag";
 const constIdPageDonate = "donatePag";
 const constIdPageAwards = "awardsPag";
 const constIdPageHist = "histPage";
-const constIdLogin = "idDivExternalHtml";
+const constIdDivLogin = "idDivExternalHtml";
 const constIdLoginOptions = "idDivLoginOptions";
 
 const constTagStorageUserToken = "UserToken";
@@ -29,46 +29,8 @@ setInfoLocal = (tag, valFromTag) => {
 }
 
 // remove alguma informação localmente (sessionStorage)
-removeInfoLocal = () => {
-    sessionStorage.removeItem(constTagStorageCurrentUserName);
-}
-
-// recupera o token de autenticação
-getUserToken = () => {
-    return sessionStorage.getItem(constTagStorageUserToken);
-}
-
-// remove token de autenticação
-removeUserToken = () => {
-    sessionStorage.removeItem(constTagStorageUserToken);
-}
-
-// recupera o nome do usuário logado
-getCurrentUserName = () => {
-    let userName = sessionStorage.getItem(constTagStorageCurrentUserName);
-    if(userName == null)
-        userName = "";
-
-    return userName;
-}
-
-// remove o nome do usuário logado
-removeCurrentUserName = () => {
-    sessionStorage.removeItem(constTagStorageCurrentUserName);
-}
-
-// recupera a pagina atual
-getCurrentPage = () => {
-    let storageCurrentPage = sessionStorage.getItem(constTagStorageCurrentPage);
-    if(storageCurrentPage == null)
-        storageCurrentPage = constIdPageHome;
-
-    return storageCurrentPage;
-}
-
-// salva a pagina atual
-setCurrentPage = (idPage) => {
-    sessionStorage.setItem(constTagStorageCurrentPage, idPage);
+removeInfoLocal = (tag) => {
+    sessionStorage.removeItem(tag);
 }
 
 // seta um texto num component SPAN
@@ -89,8 +51,11 @@ turnOnOffPage = (idDiv, isShow) => {
     }  
 }
 
-// sistema não logado
-failedLoadWS = () => {
+// seta o sistema como não logado
+setOffline = () => {
+    removeInfoLocal(constTagStorageUserToken);
+    removeInfoLocal(constTagStorageCurrentUserName);
+    removeInfoLocal(constTagStorageCurrentUserId);
     turnOnOffPage(constIdPageHome, false);
     turnOnOffPage(constIdPageDonate, false);
     turnOnOffPage(constIdPageAwards, false);
@@ -98,14 +63,15 @@ failedLoadWS = () => {
 }
 
 // manda uma requisição para o WS
-loadFromService = (typeService, urlService, jsonIn) => {
+loadFromService = (typeService, urlService, jsonIn, loadContentHtml) => {
 
     let url = constUrlBase + urlService;
 
-    let token = getUserToken();
-    if(token === null)
-        failedLoadWS();
+    let token = getInfoLocal(constTagStorageUserToken);
+    if(token === "")
+        token = null;
 
+    // monta requisição
     let fetchData = {
             method: typeService,
 			mode: 'cors',
@@ -115,41 +81,27 @@ loadFromService = (typeService, urlService, jsonIn) => {
 			}
         };
 
+    // se existe json, add na requisição
     if(jsonIn != undefined && jsonIn != null){
         fetchData["body"] = JSON.stringify(jsonIn);
     }
 
     return new Promise((resolve, reject) => {
-    fetch(url, fetchData)
+
+        // chama o Web Service
+        fetch(url, fetchData)
         .then(response => {
             
-            console.log(`Url: ${url} - return: ${response.status}`);
+            console.log(`${typeService} Url: ${url} - return: ${response.status}`);
 
             let contentType = response.headers.get("content-type");
             if(contentType && contentType.indexOf("text/html") !== -1){
                 response.text().then(html => {
-                    let divExternalHtml = document.getElementById(constIdLogin);
-                    if(divExternalHtml){
-                        turnOnOffPage(constIdLogin, true);
-                        divExternalHtml.innerHTML = html;
-                        
-                        if(token == null)
-                            setTextSpan("idErrorLogin", "");
-
-                        let loginCreatedMsg = sessionStorage.getItem(constTagStorageLoginCreatedMsg);
-                        if(loginCreatedMsg != null){
-                            turnOnOffPage("idMsgLogin", true);
-                            setTextSpan("idMsgLogin", loginCreatedMsg);
-                            setTextSpan("idErrorLogin", "");
-                            sessionStorage.removeItem(constTagStorageLoginCreatedMsg);
-                        }
-
-                        removeUserToken();
-                        removeCurrentUserName();
-                    }
-                    
-                    failedLoadWS();
-                    reject();
+                    loadHtmlReponse(html);
+                    if(loadContentHtml)
+                        resolve(html);
+                    else
+                        reject("Carregado página HTML vinda do servidor");
                 });
             }
             else if(contentType && contentType.indexOf("application/json") !== -1){
@@ -158,29 +110,61 @@ loadFromService = (typeService, urlService, jsonIn) => {
                 );
             }
             else {
-                let divExternalHtml = document.getElementById(constIdLogin);
-                if(divExternalHtml)
-                    divExternalHtml.innerHTML = response.status.toString() + ": Falha ao acessar o web service";
 
-                failedLoadWS();
-                reject();
+                setOffline();
+                let errorMsg = 'Erro ao acessar o web service: ' + response.status.toString();
+                setDivInnerHTML(constIdDivLogin, errorMsg);
+                reject(errorMsg);
             }
         })
-        .catch(function(error) {
-            failedLoadWS();
+        .catch((error) => {
 
-            let errorMsg = 'Ocorreu o seguinte erro ao acessar o web service: ' + error.message;
-            console.log(errorMsg);
-            alert(errorMsg);
-
-            reject();
+            // ocorreu algum erro na requisição, vamos colocar o sistema como offline
+            setOffline();
+            let errorMsg = 'Erro ao acessar o web service: ' + error.message;
+            setDivInnerHTML(constIdDivLogin, errorMsg);
+            reject(errorMsg);
         });
     });
+}
 
+loadHtmlReponse = (html) => {
+
+    // torna visivel a div para mostrar o conteudo da pagina html, retornada pela API
+    if(setDivInnerHTML(constIdDivLogin, html)){
+        
+        if(getInfoLocal(constTagStorageUserToken) === "")
+            setTextSpan("idErrorLogin", ""); // não vamos exibir erros de login quando o sistema ainda não possui token
+
+        let loginCreatedMsg = getInfoLocal(constTagStorageLoginCreatedMsg);
+        if(loginCreatedMsg != null){
+            turnOnOffPage("idMsgLogin", true);
+            setTextSpan("idMsgLogin", loginCreatedMsg);
+
+            setTextSpan("idErrorLogin", "");
+            removeInfoLocal(constTagStorageLoginCreatedMsg);
+        }
+    }
+
+    setOffline();
+}
+
+// seta um conteudo html numa DIV
+setDivInnerHTML = (idDiv, html) => {
+
+    let isSet = false;
+    let divElem = document.getElementById(idDiv);
+    if(divElem){
+        turnOnOffPage(idDiv, true); 
+        divElem.innerHTML = html;
+        isSet = true;
+    }
+
+    return isSet;
 }
 
 loadCurrentPage = () => {
-    let currentPage = getCurrentPage();
+    let currentPage = getInfoLocal(constTagStorageCurrentPage);
     turnOnOffPage(currentPage, true);
     loadPage(currentPage)
 }

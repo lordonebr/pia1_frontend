@@ -35,7 +35,7 @@ clickedLogin = (event) => {
                             setInfoLocal(constTagStorageCurrentUserName, jsonOut["name"]);
 
                             setTextSpan("idUserName", jsonOut["name"]);
-                            turnOnOffPage(constIdLogin, false);
+                            turnOnOffPage(constIdDivLogin, false);
                             turnOnOffPage(constIdLoginOptions, true);
                             loadCurrentPage();
                         }
@@ -47,9 +47,12 @@ clickedLogin = (event) => {
 }
 
 clickedLoadCreateUser = (event) => {
-    loadFromService('GET', '/auth/signup')
-    .then(json => {
-        console.log("Carregou tela de cadastro de usuários")
+    loadFromService('GET', '/auth/signup', null, true)
+    .then(() => {
+        console.log("Carregou tela de cadastro de usuários do servidor")
+    })
+    .catch((error) => {
+        console.log("Falha ao carregar Tela de cadastro de usuários: " + error);
     });
 }
 
@@ -94,8 +97,6 @@ clickedSignup = (event) => {
 }
 
 logout = () => {
-    removeUserToken();
-    removeCurrentUserName();
-    turnOnOffPage(constIdLoginOptions, false);
+    setOffline();
     loadCurrentPage();
 }
