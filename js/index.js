@@ -8,11 +8,10 @@ window.addEventListener("load", function(event) {
 });
 
 // recupera do WS, o saldo para doação e o recebido
-loadBalance = (exeSuccess) => {
+loadBalance = (callback) => {
 
-    let idUser = getInfoLocal(constTagStorageCurrentUserId);
-    if(idUser !== "" && !isNaN(idUser)){
-        idUser = parseInt(idUser);
+    let idUser = getMyUserId();
+    if(idUser){
 
         loadFromService('GET', `/users/${idUser}/balances`)
         .then(balanceJson => {
@@ -36,11 +35,11 @@ loadBalance = (exeSuccess) => {
             setTextSpan("idBalanceDonate", balanceDonate); 
             setTextSpan("idBalanceReception", balanceReception);
 
-            turnOnOffPage(constIdLoginOptions, true);
+            turnOnOffPage(constIdDivLoginOptions, true);
             setTextSpan("idUserName", getInfoLocal(constTagStorageCurrentUserName));
 
-            if(exeSuccess)
-                exeSuccess();
+            if(callback)
+                callback();
 
         })
         .catch((error) => {
@@ -50,15 +49,19 @@ loadBalance = (exeSuccess) => {
 }
 
 // recupera do WS, a lista dos usuarios para doação
-loadListUser = (idCbUsers, showAllUser) => {
+loadListUser = (lstIdCmbUsers, showAllUser, callback) => {
 
-    loadFromService('GET', '/users')
+    let json = null;
+    if(showAllUser)
+        json = {'allUsers': true};
+
+    loadFromService('GET', '/users', json)
         .then(usersJSON => {
 
-            const userNameTag = "name";
+            /*const userNameTag = "name";
             const idUserTag = "id";
 
-            /*usersJSON = [
+            usersJSON = [
                 {
                     [userNameTag] : "Alice Vitória",
                     [idUserTag] : 1
@@ -85,45 +88,11 @@ loadListUser = (idCbUsers, showAllUser) => {
                 },
             ]*/
 
-            let element = document.getElementById(idCbUsers);
-            if(element){
+            for(let idx = 0; idx < lstIdCmbUsers.length; idx++)
+                setComboBoxUsers(lstIdCmbUsers[idx], usersJSON, showAllUser);
 
-                let idDonateUser = element.options[element.selectedIndex].value;
-
-                // limpa conteudo antigo
-                for(let i = element.options.length - 1 ; i > 0 ; i--)
-                    element.remove(i);
-
-                let setSelected = false;
-
-                let idUser = getInfoLocal(constTagStorageCurrentUserId);
-                if(!isNaN(idUser)){
-                    idUser = parseInt(idUser);
-            
-                    // preenche com o conteudo novo vindo do WS
-                    for(let idx in usersJSON){
-
-                        if(usersJSON[idx].hasOwnProperty(userNameTag) &&
-                          usersJSON[idx].hasOwnProperty(idUserTag) 
-                        ){
-                            if(showAllUser || usersJSON[idx][idUserTag] !== idUser){
-                                let option = document.createElement("option");
-                                option.text = usersJSON[idx][userNameTag]; 
-                                option.value = usersJSON[idx][idUserTag]; 
-                                if(idDonateUser != "" && usersJSON[idx][idUserTag] == idDonateUser){
-                                    option.selected = true;
-                                    setSelected = true;
-                                }
-
-                                element.appendChild(option);
-                            }
-                        }
-                    }
-                }
-
-                if(!setSelected)
-                    element.options[0].selected = true;
-            }
+            if(callback)
+                callback();
         })
         .catch((error) => {
             console.log("Falha ao carregar lista de usuário: " + error);
@@ -188,81 +157,6 @@ loadListAwards = () => {
 
                 Newcell2.innerHTML = awardsJSON[idx][costAwardTag]; 
                 Newcell3.innerHTML = awardsJSON[idx][descAwardTag]; 
-            }
-        }
-    }
-}
-
-// recupera do WS, o histórico das transações do sistema
-loadHist = (jsonFilter) => {
-
-    // CHAMA O WS PARA OBTER O HISTÓRICO
-    alert(JSON.stringify(jsonFilter));
-
-    const dateTag = "date";
-    const nameDonorTag = "nameDonor";
-    const nameReceptorTag = "nameReceptor";
-    const valueTag = "value";
-    const descriptionTag = "description";
-
-    let histJSON = [
-        {
-            [dateTag] : "15-11-2019 20:05",
-            [nameDonorTag] : "Alice",
-            [nameReceptorTag] : "Mariana",
-            [valueTag] : 7,
-            [descriptionTag] : "Me ajudou a finalizar o projeto."
-        },
-        {
-            [dateTag] : "15-11-2019 18:00",
-            [nameDonorTag] : "André",
-            [nameReceptorTag] : "Mariana",
-            [valueTag] : 5,
-            [descriptionTag] : "Me ajudou nas consultas do banco de dados."
-        },
-        {
-            [dateTag] : "15-11-2019 16:43",
-            [nameDonorTag] : "André",
-            [nameReceptorTag] : "Alice",
-            [valueTag] : 10,
-            [descriptionTag] : "Obrigado pela ajuda no front end."
-        },
-        {
-            [dateTag] : "15-11-2019 13:57",
-            [nameDonorTag] : "Mariana",
-            [nameReceptorTag] : "André",
-            [valueTag] : 8,
-            [descriptionTag] : "Me auxiliou nas demandas dos projetos antigos."
-        }
-    ]
-
-    let element = document.getElementById("idHist");
-    if(element){
-
-        // limpa conteudo antigo
-        for(let i = element.rows.length - 1; i > 0; i--)
-            element.deleteRow(i);
-
-        // preenche com o conteudo novo vindo do WS
-        for(let idx in histJSON){
-
-            if(histJSON[idx].hasOwnProperty(dateTag) &&
-               histJSON[idx].hasOwnProperty(nameDonorTag) &&
-               histJSON[idx].hasOwnProperty(nameReceptorTag) &&
-               histJSON[idx].hasOwnProperty(valueTag) &&
-               histJSON[idx].hasOwnProperty(descriptionTag)
-            ){
-                let NewRow = element.insertRow(-1);
-                let Newcell1 = NewRow.insertCell(0); 
-                let Newcell2 = NewRow.insertCell(1);
-                let Newcell3 = NewRow.insertCell(2); 
-                let Newcell4 = NewRow.insertCell(3); 
-                let Newcell5 = NewRow.insertCell(4); 
-                Newcell1.innerHTML = histJSON[idx][dateTag]; 
-                Newcell2.innerHTML = histJSON[idx][nameDonorTag]; 
-                Newcell3.innerHTML = histJSON[idx][nameReceptorTag]; 
-                Newcell4.innerHTML = histJSON[idx][valueTag]; 
-                Newcell5.innerHTML = histJSON[idx][descriptionTag]; 
             }
         }
     }
@@ -356,51 +250,19 @@ handleClickCbAward = (cb) => {
     }
 }
 
-clickedHist = (event) => {
-
-    let cbUsersDonate = document.getElementById("cmbUsersDonate");
-    let cbUsersReceptor = document.getElementById("cmbUsersReceptor");
-    let datepicker = document.getElementById("datepicker");
-    if(cbUsersDonate && cbUsersReceptor && datepicker){
-
-        let jsonHist = null;
-        let idDonateUser = cbUsersDonate.options[cbUsersDonate.selectedIndex].value;
-        if(idDonateUser != null && idDonateUser != "")
-            jsonHist = {
-                "idUserDonate" : idDonateUser
-            };
-
-        let idReceptorUser = cbUsersReceptor.options[cbUsersReceptor.selectedIndex].value;
-        if(idReceptorUser != null && idReceptorUser != ""){
-            if(jsonHist == null)
-                jsonHist = {};
-
-            jsonHist["idUserReceptor"] = idDonateUser;
-        }
-
-        let dateFilter = datepicker.value;
-        if(dateFilter != null && dateFilter != ""){
-            if(jsonHist == null)
-                jsonHist = {};
-
-            jsonHist["dateDonate"] = dateFilter;
-        }
-
-        loadHist(jsonHist);
-    }
-}
-
 // efetua a ação de um clique do menu para processar uma página
-pageClicked = (namePage, optionHist) => {
+pageClicked = (namePage, optionMyHist) => {
 
-    turnOnOffPage(constIdPageHome,   (constIdPageHome   === namePage));
-    turnOnOffPage(constIdPageDonate, (constIdPageDonate === namePage));
+    turnOnOffPage(constIdDivPageHome,   (constIdDivPageHome   === namePage));
+    turnOnOffPage(constIdDivPageDonate, (constIdDivPageDonate === namePage));
     
-    let loadPageAwards = (constIdPageAwards === namePage);
-    turnOnOffPage(constIdPageAwards, loadPageAwards);
+    let loadPageAwards = (constIdDivPageAwards === namePage);
+    turnOnOffPage(constIdDivPageAwards, loadPageAwards);
 
-    let loadPageHist = (constIdPageHist === namePage);
-    turnOnOffPage(constIdPageHist, loadPageHist);
+    removeInfoLocal(constTagStorageUserHist);
+    turnOnOffPage(constIdDivPageHist, (constIdDivPageHist === namePage));
+    if((constIdDivPageHist === namePage) && optionMyHist)
+        setInfoLocal(constTagStorageUserHist, true);
 
     setInfoLocal(constTagStorageCurrentPage, namePage);
     loadBalance();
@@ -417,51 +279,14 @@ pageClicked = (namePage, optionHist) => {
 
         loadListAwards();
     }
-
-    if(loadPageHist){
-        loadListUser("cmbUsersDonate", true);
-        loadListUser("cmbUsersReceptor", true);
-
-        const idUser = 2;
-
-        let jsonHist = null;
-        let cbUsersDonate = document.getElementById("cmbUsersDonate");
-        let cbUsersReceptor = document.getElementById("cmbUsersReceptor");
-        if(cbUsersDonate && cbUsersReceptor){
-            if(optionHist){
-                for(let i = 0; i < cbUsersDonate.options.length; i++){
-                    if(cbUsersDonate.options[i].value == idUser){
-                        cbUsersDonate.options[i].selected = true;
-                        break;
-                    }
-                }
-
-                for(let i = 0; i < cbUsersReceptor.options.length; i++){
-                    if(cbUsersReceptor.options[i].value == idUser){
-                        cbUsersReceptor.options[i].selected = true;
-                        break;
-                    }
-                }
-
-                jsonHist = {
-                    "idUserDonate" : idUser,
-                    "idUserReceptor" : idUser
-                }                
-            }
-            else {
-                cbUsersDonate.options[0].selected = true;
-                cbUsersReceptor.options[0].selected = true;
-            }
-        }
-
-        loadHist(jsonHist);
-    }
 }
 
 loadPage = (idPage) => {
 
-    if(constIdPageHome === idPage)
+    if(constIdDivPageHome === idPage)
         initHome();
-    else if(constIdPageDonate === idPage)
+    else if(constIdDivPageDonate === idPage)
         initDonation();
+    else if (constIdDivPageHist === idPage)
+        initHist();
 }

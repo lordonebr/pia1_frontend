@@ -1,6 +1,6 @@
 initDonation = () => {
     loadBalance(setMaxDonateValue);
-    loadListUser("cmbCoworkers", false);
+    loadListUser(["cmbCoworkers"], false);
 }
 
 // seta o valor máximo que podemos doar
@@ -27,14 +27,12 @@ clickedDonate = (event) => {
     let cmbCoworkers = document.getElementById("cmbCoworkers");
     let inputQtCred = document.getElementById("inputQtCred");
     let inputDesc = document.getElementById("inputDesc");
-    let idSenderUser = getInfoLocal(constTagStorageCurrentUserId);
+    let idSenderUser = getMyUserId();
         
-    if( idSenderUser !== "" && 
-       !isNaN(idSenderUser) && 
+    if(idSenderUser && 
        cmbCoworkers && 
        inputQtCred && 
        inputDesc){
-        idSenderUser = parseInt(idSenderUser);
         let idRecipientUser = cmbCoworkers.options[cmbCoworkers.selectedIndex].value;
         let qtDonate = inputQtCred.value;
         let desc = inputDesc.value;

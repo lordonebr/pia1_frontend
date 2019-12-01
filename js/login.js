@@ -36,7 +36,7 @@ clickedLogin = (event) => {
 
                             setTextSpan("idUserName", jsonOut["name"]);
                             turnOnOffPage(constIdDivLogin, false);
-                            turnOnOffPage(constIdLoginOptions, true);
+                            turnOnOffPage(constIdDivLoginOptions, true);
                             loadCurrentPage();
                         }
                     }

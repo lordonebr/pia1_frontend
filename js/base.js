@@ -1,18 +1,22 @@
 // CONSTANTES
 const constDisplayOnOffCSS = "divOff";
 const constUrlBase = "http://localhost:3000/api/coins"
-const constIdPageHome = "homePag";
-const constIdPageDonate = "donatePag";
-const constIdPageAwards = "awardsPag";
-const constIdPageHist = "histPage";
-const constIdDivLogin = "idDivExternalHtml";
-const constIdLoginOptions = "idDivLoginOptions";
 
+// CONSTANTES dos principais ids de DIV
+const constIdDivPageHome = "homePag";
+const constIdDivPageDonate = "donatePag";
+const constIdDivPageAwards = "awardsPag";
+const constIdDivPageHist = "histPage";
+const constIdDivLogin = "idDivExternalHtml";
+const constIdDivLoginOptions = "idDivLoginOptions";
+
+// CONSTANTES das TAGS usados no storage
 const constTagStorageUserToken = "UserToken";
 const constTagStorageCurrentPage  = "CurrentPage";
 const constTagStorageCurrentUserName  = "CurrentUserName";
 const constTagStorageCurrentUserId  = "CurrentUserId";
 const constTagStorageLoginCreatedMsg  = "LoginCreatedMsg";
+const constTagStorageUserHist  = "UserHist";
 
 // recupera alguma informação localmente (sessionStorage)
 getInfoLocal = (tag) => {
@@ -33,11 +37,70 @@ removeInfoLocal = (tag) => {
     sessionStorage.removeItem(tag);
 }
 
+// recupera o id do usuario logado
+getMyUserId = () => {
+    let idUser = getInfoLocal(constTagStorageCurrentUserId);
+    if(idUser === "")
+        idUser = null;
+    else if(!isNaN(idUser))
+        idUser = parseInt(idUser);
+    else
+        idUser = null;
+
+    return idUser;
+}
+
+
 // seta um texto num component SPAN
 setTextSpan = (spanID, textContent) => {
     let element = document.getElementById(spanID);
     if(element)
         element.textContent = textContent;
+}
+
+// seta o combo box de usuarios com uma lista de valores
+setComboBoxUsers = (idComboBox, lstUserJson, showAllUser) => {
+    
+    const userNameTag = "name";
+    const idUserTag = "id";
+
+    let element = document.getElementById(idComboBox);
+    if(element){
+
+        let oldIdValueSel = element.options[element.selectedIndex].value;
+
+        // limpa conteudo antigo
+        for(let i = element.options.length - 1 ; i > 0 ; i--)
+            element.remove(i);
+
+        let setSelected = false;
+
+        let idUser = getMyUserId();
+        if(idUser){
+            // preenche com o conteudo novo vindo do WS
+            for(let idx in lstUserJson){
+
+                if(lstUserJson[idx].hasOwnProperty(userNameTag) &&
+                   lstUserJson[idx].hasOwnProperty(idUserTag) 
+                ){
+                    if(showAllUser || lstUserJson[idx][idUserTag] !== idUser){
+                        let option = document.createElement("option");
+                        option.text = lstUserJson[idx][userNameTag]; 
+                        option.value = lstUserJson[idx][idUserTag]; 
+                        if(oldIdValueSel != "" && lstUserJson[idx][idUserTag] == oldIdValueSel){
+                            option.selected = true;
+                            setSelected = true;
+                        }
+
+                        element.appendChild(option);
+                    }
+                }
+            }
+        }
+
+        if(!setSelected)
+            element.options[0].selected = true;
+    }
 }
 
 // liga/desliga uma div com o conteúdo de uma página
@@ -56,10 +119,11 @@ setOffline = () => {
     removeInfoLocal(constTagStorageUserToken);
     removeInfoLocal(constTagStorageCurrentUserName);
     removeInfoLocal(constTagStorageCurrentUserId);
-    turnOnOffPage(constIdPageHome, false);
-    turnOnOffPage(constIdPageDonate, false);
-    turnOnOffPage(constIdPageAwards, false);
-    turnOnOffPage(constIdPageHist, false);
+    turnOnOffPage(constIdDivPageHome, false);
+    turnOnOffPage(constIdDivPageDonate, false);
+    turnOnOffPage(constIdDivPageAwards, false);
+    turnOnOffPage(constIdDivPageHist, false);
+    turnOnOffPage(constIdDivLoginOptions, false);
 }
 
 // manda uma requisição para o WS
@@ -83,7 +147,18 @@ loadFromService = (typeService, urlService, jsonIn, loadContentHtml) => {
 
     // se existe json, add na requisição
     if(jsonIn != undefined && jsonIn != null){
-        fetchData["body"] = JSON.stringify(jsonIn);
+        if(typeService === 'GET'){
+
+            jsonIn = {'filter': jsonIn};
+
+            let urlParams = Object.keys(jsonIn).map(function(k) {
+                return encodeURIComponent(k) + '=' + encodeURIComponent(JSON.stringify(jsonIn[k]))
+            }).join('&');
+
+            url += '?' + urlParams;
+        }
+        else
+            fetchData["body"] = JSON.stringify(jsonIn);
     }
 
     return new Promise((resolve, reject) => {

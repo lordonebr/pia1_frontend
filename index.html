@@ -19,6 +19,7 @@
         <script src="js/login.js"></script>
         <script src="js/home.js"></script>
         <script src="js/donation.js"></script>
+        <script src="js/hist.js"></script>
         <script src="js/index.js"></script>
 
         <title>Coins - Merit Money</title>
@@ -26,7 +27,7 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-                <a class="navbar-brand" href="#" onclick='pageClicked(constIdPageHome)'>
+                <a class="navbar-brand" href="#" onclick='pageClicked(constIdDivPageHome)'>
                     <img src="images/coinMain.jpg" class="imgCoin" alt="Imagem de capa">
                     Coins: Merit Money
                 </a>
@@ -37,18 +38,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick='pageClicked(constIdPageDonate)'>Doar <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageDonate)'>Doar <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" onclick='pageClicked(constIdPageAwards)'>Resgatar</a>
+                            <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageAwards)'>Resgatar</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Histórico
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdPageHist, true)'>Ver meu</a>
-                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdPageHist, false)'>Ver todos</a>
+                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, true)'>Ver meu</a>
+                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, false)'>Ver todos</a>
                         </li>
                     </ul>
                 </div>
