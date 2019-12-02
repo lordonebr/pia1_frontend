@@ -240,6 +240,9 @@ setDivInnerHTML = (idDiv, html) => {
 
 loadCurrentPage = () => {
     let currentPage = getInfoLocal(constTagStorageCurrentPage);
+    if(currentPage === "")
+        currentPage = constIdDivPageHome;
+
     turnOnOffPage(currentPage, true);
     loadPage(currentPage)
 }

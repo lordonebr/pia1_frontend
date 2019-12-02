@@ -14,98 +14,120 @@ initAward = () => {
 
 loadListAwards = () => {
 
-    const idAwardTag = "idAward";
-    const descAwardTag = "descAwardTag";
-    const costAwardTag = "costAwardTag";
+    const idAwardTag = "id";
+    const descAwardTag = "description";
+    const costAwardTag = "cost";
 
-    let awardsJSON = [
-        {
-            [idAwardTag] : 1,
-            [descAwardTag] : "Uma caixa de bombom garoto",
-            [costAwardTag] : 10
-        },
-        {
-            [idAwardTag] : 2,
-            [descAwardTag] : "Par de ingressos Cinema Cinemark: SÁBADO",
-            [costAwardTag] : 40
-        },
-        {
-            [idAwardTag] : 3,
-            [descAwardTag] : "Voucher Outback no valor de 100 reais",
-            [costAwardTag] : 70
-        },
-        {
-            [idAwardTag] : 4,
-            [descAwardTag] : "Camisa oficial seleção brasileira",
-            [costAwardTag] : 100
-        },
-        {
-            [idAwardTag] : 5,
-            [descAwardTag] : "Um dia de folga no trabalho",
-            [costAwardTag] : 150
-        }
-    ];
+    loadFromService('GET', '/awards')
+        .then(awardsJSON => {
 
-    let element = document.getElementById("idAwardsTable");
-    if(element){
+            /*awardsJSON = [
+            {
+                [idAwardTag] : 1,
+                [descAwardTag] : "Uma caixa de bombom garoto",
+                [costAwardTag] : 10
+            },
+            {
+                [idAwardTag] : 2,
+                [descAwardTag] : "Par de ingressos Cinema Cinemark: SÁBADO",
+                [costAwardTag] : 40
+            },
+            {
+                [idAwardTag] : 3,
+                [descAwardTag] : "Voucher Outback no valor de 100 reais",
+                [costAwardTag] : 70
+            },
+            {
+                [idAwardTag] : 4,
+                [descAwardTag] : "Camisa oficial seleção brasileira",
+                [costAwardTag] : 100
+            },
+            {
+                [idAwardTag] : 5,
+                [descAwardTag] : "Um dia de folga no trabalho",
+                [costAwardTag] : 150
+            }
+        ];*/
 
-        // limpa conteudo antigo
-        for(let i = element.rows.length - 1; i > 0; i--)
-            element.deleteRow(i);
+        let element = document.getElementById("idAwardsTable");
+        if(element){
 
-        // preenche com o conteudo novo vindo do WS
-        for(let idx in awardsJSON){
+            // limpa conteudo antigo
+            for(let i = element.rows.length - 1; i > 0; i--)
+                element.deleteRow(i);
 
-            if(awardsJSON[idx].hasOwnProperty(idAwardTag) &&
-                awardsJSON[idx].hasOwnProperty(descAwardTag) &&
-                awardsJSON[idx].hasOwnProperty(costAwardTag)
-            ){
-                let NewRow = element.insertRow(-1);
-                let Newcell1 = NewRow.insertCell(0); 
-                let Newcell2 = NewRow.insertCell(1);
-                let Newcell3 = NewRow.insertCell(2); 
+            // preenche com o conteudo novo vindo do WS
+            for(let idx in awardsJSON){
 
-                let newIdCbAward = constIdCbAward + idx.toString();
-                Newcell1.innerHTML = '<div class="form-check"><input class="form-check-input" type="checkbox" id="' + newIdCbAward + '" ' + constDataIdAward + '="' + awardsJSON[idx][idAwardTag].toString() + '" ' + constDataCostAward + '="' + awardsJSON[idx][costAwardTag].toString() + '" ' +  'onclick="handleClickCbAward(this)"></div>';
+                if(awardsJSON[idx].hasOwnProperty(idAwardTag) &&
+                    awardsJSON[idx].hasOwnProperty(descAwardTag) &&
+                    awardsJSON[idx].hasOwnProperty(costAwardTag)
+                ){
+                    let NewRow = element.insertRow(-1);
+                    let Newcell1 = NewRow.insertCell(0); 
+                    let Newcell2 = NewRow.insertCell(1);
+                    let Newcell3 = NewRow.insertCell(2); 
 
-                Newcell2.innerHTML = awardsJSON[idx][costAwardTag]; 
-                Newcell3.innerHTML = awardsJSON[idx][descAwardTag]; 
+                    let newIdCbAward = constIdCbAward + idx.toString();
+                    Newcell1.innerHTML = '<div class="form-check"><input class="form-check-input" type="checkbox" id="' + newIdCbAward + '" ' + constDataIdAward + '="' + awardsJSON[idx][idAwardTag].toString() + '" ' + constDataCostAward + '="' + awardsJSON[idx][costAwardTag].toString() + '" ' +  'onclick="handleClickCbAward(this)"></div>';
+
+                    Newcell2.innerHTML = awardsJSON[idx][costAwardTag]; 
+                    Newcell3.innerHTML = awardsJSON[idx][descAwardTag]; 
+                }
             }
         }
-    }
+    })
+    .catch((error) => {
+        console.log("Falha ao carregar premiações: " + error);
+    });
 }
 
 // efetua a ação de clique do botão do formulario de resgate
 clickedGetAwards = (event) => {
 
-    let jsonGetAwards = [];
+    let idUser = getMyUserId();
+    if(idUser){
+        let jsonGetAwards = [];
 
-    let count = 0;
-    let findCbAward = true;
-    while(findCbAward){
-
-        let selIdCbAward = "#" + constIdCbAward + count.toString();
-        let cbAward = document.querySelector(selIdCbAward);
-        if(cbAward == null)
-            findCbAward = false;
-        else {
-            let idAward = cbAward.getAttribute(constDataIdAward);
-            if(cbAward.checked && idAward != null)
-                jsonGetAwards.push(
-                    {
-                        "idAward" : idAward
-                    });
+        let count = 0;
+        let findCbAward = true;
+        while(findCbAward){
+    
+            let selIdCbAward = "#" + constIdCbAward + count.toString();
+            let cbAward = document.querySelector(selIdCbAward);
+            if(cbAward == null)
+                findCbAward = false;
+            else {
+                let idAward = cbAward.getAttribute(constDataIdAward);
+                if(cbAward.checked && idAward != null)
+                    jsonGetAwards.push(
+                        {
+                            "id" : idAward
+                        });
+            }
+    
+            count++;
         }
-
-        count++;
+    
+        if(jsonGetAwards.length){
+    
+            loadFromService('POST', `/users/${idUser}/awards`, jsonGetAwards)
+            .then(jsonOut => {
+    
+                if(jsonOut.hasOwnProperty("success")){
+                    if(jsonOut["success"]){
+                        event.preventDefault(); 
+                        initAward();
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log("Falha ao resgatar prêmios: " + error);
+            });
+        }
+        else
+            alert("Selecione algum prêmio para resgate!")
     }
-
-    if(jsonGetAwards.length){
-        // CHAMA O WS PARA REALIZAR UMA TRANSAÇÃO DE RESGATE
-        alert(JSON.stringify(jsonGetAwards));
-    }
-    else
-        alert("Selecione algum prêmio para resgate!")
 
     event.preventDefault(); 
 }
