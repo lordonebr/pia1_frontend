@@ -12,6 +12,7 @@
         <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"></script>
         <script src="https://unpkg.com/gijgo@1.9.13/js/messages/messages.pt-br.js"></script>
         <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://code.iconify.design/1/1.0.2/iconify.min.js"></script>
         
         <link rel="stylesheet" type="text/css" href="css/base.css">
 
@@ -59,22 +60,43 @@
             <nav>
                 <div id="idDivLoginOptions" class="divOff">
                     <div class="row justify-content-end">
-                        <div class="col-auto mt-4">
-                            <p class="border border-info font-weight-bold px-1">Saldo
-                                <span>D: $
-                                    <span id="idBalanceDonate" class="font-weight-normal">0</span>
+                        <div class="col-auto mt-1 bg-dark rounded-pill">
+                            <div class="d-flex justify-content-center pt-1">
+                                <span class="text-warning font-weight-bold text-uppercase mt-1">Saldos</span>
+                                <button onclick="updateBalance(this)" class="btn btn-sm" title="Atualiza os saldos">
+                                    <span class="iconify iconifyReload text-white" data-icon="bytesize:reload" data-inline="false"></span>
+                                 </button>
+                            </div>
+                            <div class="d-flex justify-content-center px-2 pb-1">
+                                <span class="text-success mr-3">Doação: $
+                                    <span id="idBalanceDonate" class="font-weight-normal font-weight-bold">0</span>
                                 </span>
-                                <span>R: $
-                                    <span id="idBalanceReception" class="font-weight-normal">0</span>
-                            </p>
+                                <span class="text-primary ml-3">Recebido: $
+                                    <span id="idBalanceReception" class="font-weight-normal font-weight-bold">0</span>
+                                </span>
+                            </div>
                         </div>
-                        <div class="col-auto text-center mr-3">
+                        <div class="col-auto text-center mx-3">
                             <span class="row" id="idUserName"></span>
                             <button onclick="logout()" class="row btn btn-danger btn-sm" type="button">Logout</button>
                         </div>
                     </div>
                 </div>
             </nav>
+            
+            <div id="idDivLoading" class="mt-4">
+                <div class="d-flex justify-content-center">
+                    <h5 class="text-info text-uppercase font-weight-bold">Por favor aguarde</h5>
+                </div>
+                <div class="d-flex justify-content-center my-2">
+                    <div class="spinner-border text-info loadingPage" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <h5 class="text-info text-uppercase font-weight-bold blink_me">Carregando...</h5>
+                </div>
+            </div>
 
             <div id="idDivExternalHtml">
 
@@ -90,8 +112,14 @@
                             <li><span>A qualquer momento, confira o seu histórico de doações ou de seus colegas.</span></li>
                         </ul>
                     </div>   
-                    <div class="col-md-7 border rounded border-info py-2 pl-3 m-1">
-                        <h5>Últimas doações</h5>
+                    <div id="divLastHist" class="col-md-7 border rounded border-info py-2 pl-3 m-1 divOff">
+                        <div class="d-flex justify-content-left">
+                            <h5 class="mt-2 text-info font-weight-bold">Últimas doações</h5>
+                            <button onclick="updateLastHist(this)" class="btn btn-sm" title="Atualiza histórico">
+                                <span class="iconify iconifyReload text-info" data-icon="bytesize:reload" data-inline="false"></span>
+                            </button>
+                        </div>
+                        
                         <table class="table table-bordered table-striped table-sm" id="idLastHist">
                             <thead>
                                 <tr class="bg-info text-white"> 

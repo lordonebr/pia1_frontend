@@ -1,6 +1,8 @@
 // CONSTANTES
 const constDisplayOnOffCSS = "divOff";
 const constUrlBase = "http://localhost:3000/api/coins"
+const tagJsonSuccess = "success";
+const tagJsonMessage = "message";
 
 // CONSTANTES dos principais ids de DIV
 const constIdDivPageHome = "homePag";
@@ -9,6 +11,7 @@ const constIdDivPageAwards = "awardsPag";
 const constIdDivPageHist = "histPage";
 const constIdDivLogin = "idDivExternalHtml";
 const constIdDivLoginOptions = "idDivLoginOptions";
+const constIdDivLoading = "idDivLoading";
 
 // CONSTANTES das TAGS usados no storage
 const constTagStorageUserToken = "UserToken";
@@ -129,6 +132,8 @@ setOffline = () => {
 // manda uma requisição para o WS
 loadFromService = (typeService, urlService, jsonIn, loadContentHtml) => {
 
+    turnOnOffPage(constIdDivLoading, true);
+    
     let url = constUrlBase + urlService;
 
     let token = getInfoLocal(constTagStorageUserToken);
@@ -168,6 +173,7 @@ loadFromService = (typeService, urlService, jsonIn, loadContentHtml) => {
         .then(response => {
             
             console.log(`${typeService} Url: ${url} - return: ${response.status}`);
+            turnOnOffPage(constIdDivLoading, false);
 
             let contentType = response.headers.get("content-type");
             if(contentType && contentType.indexOf("text/html") !== -1){
@@ -194,10 +200,16 @@ loadFromService = (typeService, urlService, jsonIn, loadContentHtml) => {
         })
         .catch((error) => {
 
+            turnOnOffPage(constIdDivLoading, false);
+
             // ocorreu algum erro na requisição, vamos colocar o sistema como offline
-            setOffline();
-            let errorMsg = 'Erro ao acessar o web service: ' + error.message;
+            let errorMsg = `<h1>Erro ao obter uma resposta do servidor</h1>
+                            <p>Ao tentar acessar o servidor, ocorreu o seguinte erro: ${error.message}.</p>
+                            <p>Por favor, recarregue a página para tentar novamente.</p>`;
             setDivInnerHTML(constIdDivLogin, errorMsg);
+
+            setOffline();
+
             reject(errorMsg);
         });
     });

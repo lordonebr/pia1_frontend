@@ -1,12 +1,28 @@
+// CONSTANTES
+const constDivLastHist= 'divLastHist';
+
 initHome = () => {
-    loadBalance();
+    loadBalance(loadLastHist);
+}
+
+updateLastHist = (buttonElem) => {
+    
+    if(buttonElem)
+        buttonElem.blur();
+        
     loadLastHist();
 }
 
 // recupera do WS, o histórico das últimas transações do sistema
 loadLastHist = () => {
 
-    loadFromService('GET', '/transfers')
+    turnOnOffPage(constDivLastHist, false);
+
+    let jsonIn = {
+        "limit" : 6
+    };
+
+    loadFromService('GET', '/transfers', jsonIn)
         .then(histJSON => {
 
             const dateTag = "date";
@@ -67,6 +83,8 @@ loadLastHist = () => {
                         Newcell4.innerHTML = histJSON[idx][valueTag]; 
                     }
                 }
+
+                turnOnOffPage(constDivLastHist, true);
             }
         })
         .catch((error) => {
