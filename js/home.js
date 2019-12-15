@@ -1,5 +1,5 @@
 // CONSTANTES
-const constDivLastHist= 'divLastHist';
+const constDivLastHist = 'divLastHist';
 
 initHome = () => {
     loadBalance(loadLastHist);

@@ -138,28 +138,34 @@
             </div>
 
             <div id="donatePag" class="divOff">
-                <h1>Doação para colegas</h1>
-                <form class="border rounded border-info p-2">
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label for="cmbCoworkers">Destinatário</label>
-                            <select class="form-control" id="cmbCoworkers" required>
-                                    <option disabled selected value> --- Selecione um colega --- </option>
-                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
-                            </select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="inputQtCred">Quantidade</label>
-                            <input type="number" class="form-control" id="inputQtCred" min="1" max="999" placeholder="Qt. Créditos" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="inputDesc">Motivo</label>
-                            <input type="text" class="form-control" id="inputDesc" placeholder="Digite o motivo da doação" maxlength="300" required>
-                        </div>
+                <div class="border rounded border-info m-2 p-3">
+                    <div id="divDonatePageContent">
+                        <h3 class="text-info font-weight-bold mb-3">Doação de créditos</h3>
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label class="text-info font-weight-bold" for="cmbCoworkers">Destinatário</label>
+                                    <select class="form-control" id="cmbCoworkers" required>
+                                            <option disabled selected value> --- Selecione um colega --- </option>
+                                        <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <label class="text-info font-weight-bold" for="inputQtCred">Quantidade</label>
+                                    <input type="number" class="form-control" id="inputQtCred" min="1" max="999" placeholder="Qt. Créditos" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="text-info font-weight-bold" for="inputDesc">Motivo</label>
+                                    <input type="text" class="form-control" id="inputDesc" placeholder="Digite o motivo da doação" maxlength="300" required>
+                                </div>
+                            </div>
+                            
+                            <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary">Doar</button>
+                        </form>
                     </div>
-                    
-                    <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary">Doar</button>
-                  </form>
+                    <div id="divDonatePageMessage">
+                    </div>
+                </div>
             </div>
 
             <div id="awardsPag" class="divOff">
