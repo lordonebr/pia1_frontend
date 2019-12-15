@@ -28,61 +28,74 @@
     </head>
     <body>
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-                <a class="navbar-brand" href="#" onclick='pageClicked(constIdDivPageHome)'>
-                    <img src="images/coinMain.jpg" class="imgCoin" alt="Imagem de capa">
-                    Coins: Merit Money
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageDonate)'>Doar <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageAwards)'>Resgatar</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Histórico
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, true)'>Ver meu</a>
-                            <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, false)'>Ver todos</a>
-                        </li>
-                    </ul>
-                </div>
-                
-            </nav>
-            <nav>
-                <div id="idDivLoginOptions" class="divOff">
-                    <div class="row justify-content-end">
-                        <div class="col-auto mt-1 bg-dark rounded-pill">
-                            <div class="d-flex justify-content-center pt-1">
-                                <span class="text-warning font-weight-bold text-uppercase mt-1">Saldos</span>
-                                <button onclick="updateBalance(this)" class="btn btn-sm" title="Atualiza os saldos">
-                                    <span class="iconify iconifyReload text-white" data-icon="bytesize:reload" data-inline="false"></span>
-                                 </button>
-                            </div>
-                            <div class="d-flex justify-content-center px-2 pb-1">
-                                <span class="text-success mr-3">Doação: $
-                                    <span id="idBalanceDonate" class="font-weight-normal font-weight-bold">0</span>
-                                </span>
-                                <span class="text-primary ml-3">Recebido: $
-                                    <span id="idBalanceReception" class="font-weight-normal font-weight-bold">0</span>
-                                </span>
+            <div class="bg-info">
+                <nav class="navbar navbar-expand-lg navbar-dark ">
+                    <a class="navbar-brand" href="#" onclick='pageClicked(constIdDivPageHome)'>
+                        <span class="iconify iconifyPage mr-1" data-icon="whh:coins" data-inline="false"></span>
+                        Coins: Merit Money
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageDonate)'>Doar <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageAwards)'>Resgatar</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Histórico
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, true)'>Ver meu</a>
+                                <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, false)'>Ver todos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <div id="idDivLoginOptions" class="divOff mb-3">
+                    <div class="d-flex mx-2">
+                        <div class="mr-auto">
+                            <div class="col-auto mt-1 bg-dark rounded-pill">
+                                <div class="d-flex justify-content-center pt-1">
+                                    <span class="iconify iconifyReload text-warning mt-2" data-icon="emojione-monotone:balance-scale" data-inline="false"></span>
+                                    <span class="text-warning font-weight-bold text-uppercase mt-1 ml-1">Saldos</span>
+                                    <button onclick="updateBalance(this)" class="btn btn-sm" title="Atualiza os saldos">
+                                        <span class="iconify iconifyReload text-white" data-icon="bytesize:reload" data-inline="false"></span>
+                                    </button>
+                                </div>
+                                <div class="d-flex justify-content-center px-2 pb-1">
+                                    <span class="text-success mr-3">Doação: $
+                                        <span id="idBalanceDonate" class="font-weight-normal font-weight-bold">0</span>
+                                    </span>
+                                    <span class="text-primary ml-3">Recebido: $
+                                        <span id="idBalanceReception" class="font-weight-normal font-weight-bold">0</span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-auto text-center mx-3">
-                            <span class="row" id="idUserName"></span>
-                            <button onclick="logout()" class="row btn btn-danger btn-sm" type="button">Logout</button>
+                        <div class="pb-2">
+                            <div class="col-auto border rounded border-white p-2">
+                                <div class="d-flex justify-content-center mb-1">
+                                    <span class="iconify iconifyReload text-white mt-1" data-icon="fa:user-circle" data-inline="false"></span>
+                                    <span class="text-white ml-1" id="idUserName"></span>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button onclick="logout()" class="row btn btn-danger btn-sm" type="button">
+                                        Logout
+                                        <span class="iconify" data-icon="websymbol:logout" data-inline="false"></span>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </nav>
+            </div>
             
             <div id="idDivLoading" class="mt-4">
                 <div class="d-flex justify-content-center">
@@ -178,7 +191,10 @@
 
             <div id="awardsPag" class="divOff">
                 <div class="border rounded border-info m-2 p-3">
-                    <h3 class="text-info font-weight-bold mb-3">Resgate de prêmios</h3>
+                    <div class="d-flex justify-content-left">
+                        <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="fa-solid:award" data-inline="false"></span>
+                        <h3 class="text-info font-weight-bold mb-3">Resgate de prêmios</h3>
+                    </div>
                     <form>
                         <table class="table table-bordered table-striped table-sm" id="idAwardsTable">
                             <thead>
@@ -192,35 +208,41 @@
                                 <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
                             </tbody>
                         </table> 
-                        <strong class="d-block"><span>Créditos selecionados: <span id="idTotalAwardsSel">0</span></strong>
-                        <strong class="d-block"><span>Quantidade selecionada: <span id="idQtAwardsSel">0</span></strong>
-                        
-                        <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary">Resgatar</button>
+
+                        <div class="text-info">
+                            <h6><span class="font-weight-bold">Itens selecionados: </span><span id="idQtAwardsSel">0</span></h6>
+                            <h6><span class="font-weight-bold">Créditos selecionados: </span><span id="idTotalAwardsSel">0</span></h6>
+                        </div>
+
+                        <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary mt-4">Resgatar</button>
                     </form>
                 </div>
             </div>
 
             <div id="histPage" class="divOff"> 
-                <h1>Histórico de doações</h1>
+                <div class="d-flex justify-content-left">
+                    <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="simple-line-icons:book-open" data-inline="false"></span>
+                    <h2 class="text-info font-weight-bold mb-3">Histórico de transações</h2>
+                </div>
                 <form class="border rounded border-info p-2">
-                        <h6>Para um histório mais detalhado utilize dos filtros abaixo:</h6>
+                    <h6 class="text-info font-weight-bold font-weight-bold text-uppercase mb-3">Filtros</h6>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="cmbUsersDonate">Emissor</label>
+                            <label class="text-info font-weight-bold" for="cmbUsersDonate">Emissor</label>
                             <select class="form-control" id="cmbUsersDonate">
                                     <option selected value> --- Selecione um emissor --- </option>
                                  <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
                             </select>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="cmbUsersReceptor">Destinatário</label>
+                            <label class="text-info font-weight-bold" for="cmbUsersReceptor">Destinatário</label>
                             <select class="form-control" id="cmbUsersReceptor">
                                     <option selected value> --- Selecione um destinatário --- </option>
                                  <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
                             </select>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="datepicker">Data da doação</label>
+                            <label class="text-info font-weight-bold" for="datepicker">Data da doação</label>
                             <input id="datepicker" class="form-control" placeholder="Selecione uma data"  />
                             <script>
                                 var datepicker, config;
@@ -239,7 +261,7 @@
                     <button type="submit" onclick="clickedHist(event)" class="btn btn-primary">Filtrar</button>
                 </form>
 
-                <table class="table table-bordered table-striped table-sm" id="idHist">
+                <table class="table table-bordered table-striped table-sm mt-1" id="idHist">
                     <thead>
                         <tr class="bg-info text-white"> 
                             <th scope="col">Data</th>
