@@ -15,6 +15,14 @@
     width: 90%;
 }
 
+.iconifyPage{
+    width: 32px; height: 32px;
+}
+
+.iconifyButton{
+    width: 21px; height: 21px;
+}
+
 .iconifyReload {
     width: 16px; height: 16px;
 }

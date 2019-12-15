@@ -140,7 +140,10 @@
             <div id="donatePag" class="divOff">
                 <div class="border rounded border-info m-2 p-3">
                     <div id="divDonatePageContent">
-                        <h3 class="text-info font-weight-bold mb-3">Doação de créditos</h3>
+                        <div class="d-flex justify-content-left">
+                            <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="emojione-monotone:money-with-wings" data-inline="false"></span>
+                            <h3 class="text-info font-weight-bold mb-3">Doação de créditos</h3>
+                        </div>
                         <form>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
@@ -160,7 +163,12 @@
                                 </div>
                             </div>
                             
-                            <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary">Doar</button>
+                            <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary font-weight-bold text-uppercase">
+                                <div class="d-flex justify-content-left">
+                                    <h6 class="mt-1">Doar</h6>
+                                    <span class="iconify iconifyButton mt-1 ml-2" data-icon="icomoon-free:arrow-right" data-inline="false"></span>
+                                </div>
+                            </button>
                         </form>
                     </div>
                     <div id="divDonatePageMessage">
@@ -169,26 +177,27 @@
             </div>
 
             <div id="awardsPag" class="divOff">
-                <h1>Resgate de prêmios</h1>
-                <form class="border rounded border-info p-2">
-                    
-                    <table class="table table-bordered table-striped table-sm" id="idAwardsTable">
-                        <thead>
-                            <tr class="bg-info text-white"> 
-                                <th scope="col"></th>
-                                <th scope="col">Custo</th>
-                                <th scope="col" class="colDescAward">Descrição do prêmio</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-light">
-                            <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
-                        </tbody>
-                    </table> 
-                    <strong class="d-block"><span>Créditos selecionados: <span id="idTotalAwardsSel">0</span></strong>
-                    <strong class="d-block"><span>Quantidade selecionada: <span id="idQtAwardsSel">0</span></strong>
-                    
-                    <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary">Resgatar</button>
-                  </form>
+                <div class="border rounded border-info m-2 p-3">
+                    <h3 class="text-info font-weight-bold mb-3">Resgate de prêmios</h3>
+                    <form>
+                        <table class="table table-bordered table-striped table-sm" id="idAwardsTable">
+                            <thead>
+                                <tr class="bg-info text-white"> 
+                                    <th scope="col"></th>
+                                    <th scope="col">Custo</th>
+                                    <th scope="col" class="colDescAward">Descrição do prêmio</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-light">
+                                <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
+                            </tbody>
+                        </table> 
+                        <strong class="d-block"><span>Créditos selecionados: <span id="idTotalAwardsSel">0</span></strong>
+                        <strong class="d-block"><span>Quantidade selecionada: <span id="idQtAwardsSel">0</span></strong>
+                        
+                        <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary">Resgatar</button>
+                    </form>
+                </div>
             </div>
 
             <div id="histPage" class="divOff"> 
