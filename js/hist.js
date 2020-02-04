@@ -83,6 +83,7 @@ clickedHist = (event) => {
             jsonHist[tagIdUserDate] = dateFilter;
         }
 
+        event.preventDefault(); 
         loadHist(jsonHist);
     }
 }
