@@ -117,6 +117,17 @@ loadListUser = (lstIdCmbUsers, showAllUser, callback) => {
 // efetua a ação de um clique do menu para processar uma página
 pageClicked = (namePage, optionMyHist) => {
 
+	if(constIdDivPageHome   === namePage)
+		gtag('event', 'Home', {'send_to': 'UA-168421714-1','event_category': 'Acesso','event_label': 'Clique'});
+	else if(constIdDivPageDonate   === namePage)
+		gtag('event', 'Doação', {'send_to': 'UA-168421714-1','event_category': 'Acesso','event_label': 'Clique'});
+	else if(constIdDivPageAwards   === namePage)
+		gtag('event', 'Resgate', {'send_to': 'UA-168421714-1','event_category': 'Acesso','event_label': 'Clique'});
+	else if(constIdDivPageHist   === namePage && optionMyHist)
+		gtag('event', 'Histórico Pessoal', {'send_to': 'UA-168421714-1','event_category': 'Acesso','event_label': 'Clique'});
+	else if(constIdDivPageHist   === namePage && !optionMyHist)
+		gtag('event', 'Histórico Geral', {'send_to': 'UA-168421714-1','event_category': 'Acesso','event_label': 'Clique'});
+
     turnOnOffPage(constIdDivPageHome,   (constIdDivPageHome   === namePage));
     turnOnOffPage(constIdDivPageDonate, (constIdDivPageDonate === namePage));
     turnOnOffPage(constIdDivPageAwards, (constIdDivPageAwards === namePage));
