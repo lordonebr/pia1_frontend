@@ -3,6 +3,42 @@
     height: 40px; 
 }
 
+.colorDefault {
+    background: #7f7acbff;
+    color: white;
+}
+
+.colorDefaultDark {
+    background: #5650A6;
+    color: white;
+}
+
+.colorDefaultAux {
+    background: #95a8daff;
+    color: white;
+}
+
+.textColorDefaultDark {
+    color: #5650A6;
+}
+
+.textColorDefault {
+    color: #7f7acbff;
+}
+
+.textColorAux {
+    color: #2CB0BF;
+}
+
+.textColorAux2 {
+    color: #95a8daff;
+}
+
+.borderSpecial {
+    border: 1px solid #5650A6;
+    border-radius: 10px;
+}
+
 .divOff {
     display:none;
 }
@@ -27,9 +63,17 @@
     width: 17px; height: 17px;
 }
 
+.iconifyUserLogged {
+    width: 14px; height: 14px;
+}
+
 .loadingPage {
     width: 3rem; 
     height: 3rem;
+}
+
+.userLogged {
+    font-size: 12px;
 }
 
 .blink_me {

@@ -10,7 +10,6 @@
 
 		  gtag('config', 'UA-168421714-1');
 		</script>
-
 	
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -36,260 +35,28 @@
         <script src="js/hist.js"></script>
         <script src="js/index.js"></script>
         <script src="js/pwa-sw-register.js"></script>
+        <script src="js/components/pageHome.js"></script>
+        <script src="js/components/pageDonate.js"></script>
+        <script src="js/components/pageAwards.js"></script>
+        <script src="js/components/pageHist.js"></script>
+        <script src="js/components/loading.js"></script>
+        <script src="js/components/menu.js"></script>
+        <script src="js/components/userLogged.js"></script>
 
         <title>Coins - Merit Money</title>
     </head>
     <body>
         <div class="container">
-            <div class="bg-info">
-                <nav class="navbar navbar-expand-lg navbar-dark ">
-                    <a class="navbar-brand" href="#" onclick='pageClicked(constIdDivPageHome)'>
-                        <span class="iconify iconifyPage mr-1" data-icon="whh:coins" data-inline="false"></span>
-                        Coins: Merit Money
-                    </a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageDonate)'>Doar <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" onclick='pageClicked(constIdDivPageAwards)'>Resgatar</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Histórico
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, true)'>Ver meu</a>
-                                <a class="dropdown-item" href="#" onclick='pageClicked(constIdDivPageHist, false)'>Ver todos</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+            <page-menu></page-menu>
+            <page-user-logged></page-user-logged>
+            <page-loading></page-loading>
 
-                <div id="idDivLoginOptions" class="divOff mb-3">
-                    <div class="d-flex mx-2">
-                        <div class="mr-auto">
-                            <div class="col-auto mt-1 bg-dark rounded-pill">
-                                <div class="d-flex justify-content-center pt-1">
-                                    <span class="iconify iconifyReload text-warning mt-2" data-icon="emojione-monotone:balance-scale" data-inline="false"></span>
-                                    <span class="text-warning font-weight-bold text-uppercase mt-1 ml-1">Saldos</span>
-                                    <button onclick="updateBalance(this)" class="btn btn-sm" title="Atualiza os saldos">
-                                        <span class="iconify iconifyReload text-white" data-icon="bytesize:reload" data-inline="false"></span>
-                                    </button>
-                                </div>
-                                <div class="d-flex justify-content-center px-2 pb-1">
-                                    <span class="text-success mr-3">Doação: $
-                                        <span id="idBalanceDonate" class="font-weight-normal font-weight-bold">0</span>
-                                    </span>
-                                    <span class="text-primary ml-3">Recebido: $
-                                        <span id="idBalanceReception" class="font-weight-normal font-weight-bold">0</span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <div class="col-auto border rounded border-white p-2">
-                                <div class="d-flex justify-content-center mb-1">
-                                    <span class="iconify iconifyReload text-white mt-1" data-icon="fa:user-circle" data-inline="false"></span>
-                                    <span class="text-white ml-1" id="idUserName"></span>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <button onclick="logout()" class="row btn btn-danger btn-sm" type="button">
-                                        Logout
-                                        <span class="iconify" data-icon="websymbol:logout" data-inline="false"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div id="idDivLoading" class="mt-4">
-                <div class="d-flex justify-content-center">
-                    <h5 class="text-info text-uppercase font-weight-bold">Por favor aguarde</h5>
-                </div>
-                <div class="d-flex justify-content-center my-2">
-                    <div class="spinner-border text-info loadingPage" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <h5 class="text-info text-uppercase font-weight-bold blink_me">Carregando...</h5>
-                </div>
-            </div>
+            <div id="idDivExternalHtml"></div>
 
-            <div id="idDivExternalHtml">
-
-            </div>
-
-            <div id="homePag" class="divOff">
-                <div class="row justify-content-md-center">
-                    <div class="col">
-                        <h4>Instruções básicas:</h4>
-                        <ul>
-                            <li><span>Recompense seus colegas de trabalho, apartir do seu saldo destinado a doações.</span></li>
-                            <li><span>Resgate recompensas incríveis apartir dos créditos recebidos.</span></li>
-                            <li><span>A qualquer momento, confira o seu histórico de doações ou de seus colegas.</span></li>
-                        </ul>
-                    </div>   
-                    <div id="divLastHist" class="col-md-7 border rounded border-info py-2 pl-3 m-1 divOff">
-                        <div class="d-flex justify-content-left">
-                            <h5 class="mt-2 text-info font-weight-bold">Últimas doações</h5>
-                            <button onclick="updateLastHist(this)" class="btn btn-sm" title="Atualiza histórico">
-                                <span class="iconify iconifyReload text-info" data-icon="bytesize:reload" data-inline="false"></span>
-                            </button>
-                        </div>
-                        
-                        <table class="table table-bordered table-striped table-sm" id="idLastHist">
-                            <thead>
-                                <tr class="bg-info text-white"> 
-                                    <th scope="col">Data</th>
-                                    <th scope="col">Emissor</th>
-                                    <th scope="col">Destinatário</th>
-                                    <th scope="col">Créditos</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-light">
-                                <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
-                            </tbody>
-                        </table> 
-                    </div>     
-                </div>
-            </div>
-
-            <div id="donatePag" class="divOff">
-                <div class="border rounded border-info m-2 p-3">
-                    <div id="divDonatePageContent">
-                        <div class="d-flex justify-content-left">
-                            <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="emojione-monotone:money-with-wings" data-inline="false"></span>
-                            <h3 class="text-info font-weight-bold mb-3">Doação de créditos</h3>
-                        </div>
-                        <form>
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label class="text-info font-weight-bold" for="cmbCoworkers">Destinatário</label>
-                                    <select class="form-control" id="cmbCoworkers" required>
-                                            <option disabled selected value> --- Selecione um colega --- </option>
-                                        <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="text-info font-weight-bold" for="inputQtCred">Quantidade</label>
-                                    <input type="number" class="form-control" id="inputQtCred" min="1" max="999" placeholder="Qt. Créditos" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="text-info font-weight-bold" for="inputDesc">Motivo</label>
-                                    <input type="text" class="form-control" id="inputDesc" placeholder="Digite o motivo da doação" maxlength="300" required>
-                                </div>
-                            </div>
-                            
-                            <button type="submit" onclick="clickedDonate(event)" class="btn btn-primary font-weight-bold text-uppercase">
-                                <div class="d-flex justify-content-left">
-                                    <h6 class="mt-1">Doar</h6>
-                                    <span class="iconify iconifyButton mt-1 ml-2" data-icon="icomoon-free:arrow-right" data-inline="false"></span>
-                                </div>
-                            </button>
-                        </form>
-                    </div>
-                    <div id="divDonatePageMessage">
-                    </div>
-                </div>
-            </div>
-
-            <div id="awardsPag" class="divOff">
-                <div class="border rounded border-info m-2 p-3">
-                    <div class="d-flex justify-content-left">
-                        <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="fa-solid:award" data-inline="false"></span>
-                        <h3 class="text-info font-weight-bold mb-3">Resgate de prêmios</h3>
-                    </div>
-                    <form>
-                        <table class="table table-bordered table-striped table-sm" id="idAwardsTable">
-                            <thead>
-                                <tr class="bg-info text-white"> 
-                                    <th scope="col"></th>
-                                    <th scope="col">Custo</th>
-                                    <th scope="col" class="colDescAward">Descrição do prêmio</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-light">
-                                <!-- CONTEÚDO DAS ÚLTIMAS TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
-                            </tbody>
-                        </table> 
-
-                        <div class="text-info">
-                            <h6><span class="font-weight-bold">Itens selecionados: </span><span id="idQtAwardsSel">0</span></h6>
-                            <h6><span class="font-weight-bold">Créditos selecionados: </span><span id="idTotalAwardsSel">0</span></h6>
-                        </div>
-
-                        <button type="submit" onclick="clickedGetAwards(event)" class="btn btn-primary mt-4">Resgatar</button>
-                    </form>
-                </div>
-            </div>
-
-            <div id="histPage" class="divOff"> 
-                <div class="d-flex justify-content-left">
-                    <span class="iconify iconifyPage text-info mt-1 mr-2" data-icon="simple-line-icons:book-open" data-inline="false"></span>
-                    <h2 class="text-info font-weight-bold mb-3">Histórico de transações</h2>
-                </div>
-                <form class="border rounded border-info p-2">
-                    <h6 class="text-info font-weight-bold font-weight-bold text-uppercase mb-3">Filtros</h6>
-                    <div class="form-row">
-                        <div class="form-group col-md-4">
-                            <label class="text-info font-weight-bold" for="cmbUsersDonate">Emissor</label>
-                            <select class="form-control" id="cmbUsersDonate">
-                                    <option selected value> --- Selecione um emissor --- </option>
-                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="text-info font-weight-bold" for="cmbUsersReceptor">Destinatário</label>
-                            <select class="form-control" id="cmbUsersReceptor">
-                                    <option selected value> --- Selecione um destinatário --- </option>
-                                 <!-- OPÇÕES CONTENDO LISTA DE COLEGAS: CÓDIGO GERADO VIA JAVASCRIPT --> 
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label class="text-info font-weight-bold" for="datepicker">Data da doação</label>
-                            <input id="datepicker" class="form-control" placeholder="Selecione uma data"  />
-                            <script>
-                                var datepicker, config;
-                                config = {
-                                    locale: 'pt-br',
-                                    format: 'dd/mm/yyyy',
-                                    uiLibrary: 'bootstrap4'
-                                };
-                                $(document).ready(function () {
-                                    datepicker = $('#datepicker').datepicker(config);
-                                });
-                            </script>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" onclick="clickedHist(event)" class="btn btn-primary">Filtrar</button>
-                </form>
-
-                <table class="table table-bordered table-striped table-sm mt-1" id="idHist">
-                    <thead>
-                        <tr class="bg-info text-white"> 
-                            <th scope="col">Data</th>
-                            <th scope="col">Emissor</th>
-                            <th scope="col">Destinatário</th>
-                            <th scope="col">Créditos</th>
-                            <th scope="col">Descrição</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-light">
-                        <!-- CONTEÚDO DO HISTÓRICO DE TRANSAÇÕES: CÓDIGO GERADO VIA JAVASCRIPT -->   
-                    </tbody>
-                </table> 
-            </div>
-            
+            <page-home></page-home>
+            <page-donate></page-donate>
+            <page-awards></page-awards>
+            <page-hist></page-hist>
         </div>
         
         <!-- Optional JavaScript -->
