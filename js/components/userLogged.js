@@ -17,12 +17,12 @@ class PageUserLogged extends HTMLElement {
                             </div>
                             <div class="d-flex justify-content-center px-2 pb-1 mt-1 textColorDefaultDark">
                                 <span class="font-weight-bold mr-3">Doação: 
-                                    <span class="text-white bg-primary rounded-pill pl-2 pr-2 pt-1 pb-1">$
+                                    <span class="text-white bg-primary rounded-pill pl-2 pr-2 pt-1 pb-1 balanceValue">$
                                         <span id="idBalanceDonate" >0</span>
                                     </span>
                                 </span>
                                 <span class="ml-3 font-weight-bold">Recebido: 
-                                    <span class="text-white bg-success rounded-pill pl-2 pr-2 pt-1 pb-1">$
+                                    <span class="text-white bg-success rounded-pill pl-2 pr-2 pt-1 pb-1 balanceValue">$
                                         <span id="idBalanceReception">0</span>
                                     </span>
                                 </span>

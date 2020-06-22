@@ -76,6 +76,10 @@
     font-size: 12px;
 }
 
+.balanceValue {
+    display: inline-block;
+}
+
 .blink_me {
     animation: blinker 1.5s linear infinite;
   }
