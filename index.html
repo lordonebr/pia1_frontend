@@ -42,6 +42,17 @@
         <script src="js/components/loading.js"></script>
         <script src="js/components/menu.js"></script>
         <script src="js/components/userLogged.js"></script>
+        <script>
+            var datepicker, config;
+            config = {
+                locale: 'pt-br',
+                format: 'dd/mm/yyyy',
+                uiLibrary: 'bootstrap4'
+            };
+            $(document).ready(function () {
+                datepicker = $('#datepicker').datepicker(config);
+            });
+        </script>
 
         <title>Coins - Merit Money</title>
     </head>

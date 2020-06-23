@@ -28,17 +28,7 @@ class PageHist extends HTMLElement {
                     <div class="form-group col-md-4">
                         <label class="font-weight-bold" for="datepicker">Data da doação</label>
                         <input id="datepicker" class="form-control" placeholder="Selecione uma data"  />
-                        <script>
-                            var datepicker, config;
-                            config = {
-                                locale: 'pt-br',
-                                format: 'dd/mm/yyyy',
-                                uiLibrary: 'bootstrap4'
-                            };
-                            $(document).ready(function () {
-                                datepicker = $('#datepicker').datepicker(config);
-                            });
-                        </script>
+                        
                     </div>
                 </div>
                 
